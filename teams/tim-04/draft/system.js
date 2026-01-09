@@ -1,54 +1,115 @@
 /**
- * Liangpran System Core
- * Handles localStorage database, authentication, and CRUD logic.
+ * Liangpran Enterprise System Core
+ * Architecture: LocalStorage Mock DB + Simulated API
+ * Version: 4.0.0 (Enterprise)
  */
 
-const System = (function() {
-    const DB_KEY = 'liangpran_db_v1';
-    const SESSION_KEY = 'liangpran_session';
+const System = (function () {
+    const DB_KEY = 'liangpran_ent_db_v4';
+    const SESSION_KEY = 'liangpran_ent_session_v4';
 
-    // Mock MD5 for '123' -> '202cb962ac59075b964b07152d234b70'
-    // Simple hash function for simulation purposes
-    function simpleHash(str) {
-        let hash = 0;
-        for (let i = 0, len = str.length; i < len; i++) {
-            let chr = str.charCodeAt(i);
-            hash = (hash << 5) - hash + chr;
-            hash |= 0; // Convert to 32bit integer
-        }
-        return Math.abs(hash).toString(16);
-    }
-    // Pre-calculated hash for '123' used in seed
-    const HASH_123 = "123"; // Keeping it simple for this mock, normally we'd force MD5
-
-    // Initial Dummy Data
+    // --- SEED DATA (Realistic Mahakam Ulu Content) ---
     const seedData = {
+        meta: { version: '4.0.0', created_at: Date.now() },
         users: [
-            { id: 1, username: 'admin', password: '123', name: 'Super Admin', role: 'admin' },
-            { id: 2, username: 'editor', password: '123', name: 'Content Editor', role: 'editor' }
+            { id: 1, username: 'admin', password: '123', name: 'Chief Ranger', role: 'super_admin', avatar: 'https://ui-avatars.com/api/?name=Admin&background=2D3A3A&color=fff' },
+            { id: 2, username: 'ranger', password: '123', name: 'Field Officer', role: 'ranger', avatar: 'https://ui-avatars.com/api/?name=Ranger&background=8C7E6A&color=fff' }
         ],
-        categories: [
-            { id: 1, name: 'Nature', slug: 'nature' },
-            { id: 2, name: 'Culture', slug: 'culture' },
-            { id: 3, name: 'Event', slug: 'event' }
+        // 1. Destinations (Core Spots)
+        destinations: [
+            {
+                id: 'DST-001',
+                name: 'Puncak Liangpran',
+                type: 'Mountain Peak',
+                desc: 'Titik tertinggi dengan pemandangan awan abadi. Saksi bisu sejarah geologis Kalimantan.',
+                elevation: '2240 mdpl',
+                status: 'Open',
+                image: './assets/hero-mountain.png'
+            },
+            {
+                id: 'DST-002',
+                name: 'Hutan Lumut',
+                type: 'Forest Zone',
+                desc: 'Zona ekosistem purba di ketinggian 1800mdpl, didominasi lumut tebal dan anggrek epifit.',
+                elevation: '1800 mdpl',
+                status: 'Restricted',
+                image: './assets/nature-forest.png'
+            }
         ],
-        main_data: [
-            // Nature
-            { id: 1, title: 'Hutan Hujan Tropis', category_id: 1, desc: 'Paru-paru dunia yang masih terjaga.', image: './assets/nature-forest.png', type: 'image' },
-            { id: 2, title: 'Flora Endemik', category_id: 1, desc: 'Rumah bagi ribuan spesies anggrek.', image: null, type: 'pattern' },
-            { id: 3, title: 'Sungai Kehidupan', category_id: 1, desc: 'Aliran nadi Mahakam.', image: './assets/hero-mountain.png', type: 'river' },
-            { id: 4, title: 'Puncak Liangpran', category_id: 1, desc: 'Negeri di atas awan.', image: './assets/hero-mountain.png', type: 'image' },
-            { id: 5, title: 'Air Terjun Jantur', category_id: 1, desc: 'Kesegaran alami hutan borneo.', image: './assets/nature-forest.png', type: 'image' },
-            // Culture
-            { id: 6, title: 'Tari Hudoq', category_id: 2, desc: 'Tarian topeng pemanggil roh baik.', image: './assets/culture-community.png', type: 'image' },
-            { id: 7, title: 'Rumah Lamin', category_id: 2, desc: 'Arsitektur panjang khas Dayak.', image: './assets/culture-community.png', type: 'image' },
-            { id: 8, title: 'Tenun Ulap Doyo', category_id: 2, desc: 'Kain tenun dari serat daun doyo.', image: './assets/culture-community.png', type: 'image' },
-            { id: 9, title: 'Upacara Adat', category_id: 2, desc: 'Ritual syukur panen raya.', image: './assets/culture-community.png', type: 'image' },
-            { id: 10, title: 'Seni Manik', category_id: 2, desc: 'Kerajinan tangan penuh makna.', image: './assets/culture-community.png', type: 'image' }
+        // 2. Trails (Routes)
+        trails: [
+            {
+                id: 'TRL-001',
+                name: 'Jalur Leluhur (Ancestral Path)',
+                difficulty: 'Hard',
+                distance: '12 km',
+                duration: '8-10 Hours',
+                features: ['River Crossing', 'Steep Climb', 'High Biodiversity'],
+                status: 'Open'
+            },
+            {
+                id: 'TRL-002',
+                name: 'River Side Trek',
+                difficulty: 'Easy',
+                distance: '3 km',
+                duration: '2 Hours',
+                features: ['Waterfalls', 'Bird Watching', 'Family Friendly'],
+                status: 'Open'
+            }
+        ],
+        // 3. Biodiversity (Flora & Fauna)
+        biodiversity: [
+            {
+                id: 'BIO-001',
+                name: 'Rangkong Gading',
+                scientific: 'Rhinoplax vigil',
+                type: 'Fauna',
+                status: 'Critically Endangered',
+                desc: 'Burung keramat masyarakat Dayak, simbol kepemimpinan dan kesucian.',
+                image: 'https://cdn.betahita.id/6/0/8/5/6085.jpg'
+            },
+            {
+                id: 'BIO-002',
+                name: 'Anggrek Hitam',
+                scientific: 'Coelogyne pandurata',
+                type: 'Flora',
+                status: 'Protected',
+                desc: 'Maskot flora Kalimantan Timur, terkenal dengan lidah hitamnya yang eksotis.',
+                image: 'https://mentarivillage.com/wp-content/uploads/2025/08/Coelogyne_pandurata_orchid.jpg'
+            },
+            {
+                id: 'BIO-003',
+                name: 'Macan Dahan',
+                scientific: 'Neofelis diardi',
+                type: 'Fauna',
+                status: 'Vulnerable',
+                desc: 'Predator puncak hutan Kalimantan, ahli memanjat yang sulit dipahami.',
+                image: 'https://upload.wikimedia.org/wikipedia/commons/2/2d/CloudedLeopard.jpg'
+            }
+        ],
+        // 4. Articles
+        articles: [
+            {
+                id: 'ART-001',
+                title: 'Menjaga Jantung Borneo',
+                author: 'Tim Konservasi',
+                date: '2026-01-08',
+                summary: 'Upaya pelestarian hutan adat melalui program ekowisata berbasis komunitas.'
+            }
+        ],
+        // 5. Visitor Analytics (Mock Logs)
+        visitors_logs: [
+            { date: '2026-01-01', count: 45 },
+            { date: '2026-01-02', count: 52 },
+            { date: '2026-01-03', count: 38 },
+            { date: '2026-01-04', count: 65 },
+            { date: '2026-01-05', count: 72 },
+            { date: '2026-01-06', count: 89 },
+            { date: '2026-01-07', count: 95 }
         ]
     };
 
-    // --- Database Core ---
+    // --- CORE DATALAYER ---
     function loadDB() {
         const data = localStorage.getItem(DB_KEY);
         if (!data) {
@@ -62,84 +123,85 @@ const System = (function() {
         localStorage.setItem(DB_KEY, JSON.stringify(data));
     }
 
-    // --- API Exposure ---
+    // --- API INTERFACE ---
     return {
-        key: 'SYSTEM_READY',
-        
-        // Database Operations
+        // Database Access
         db: {
-            getAll: (table) => {
+            get: (table) => {
                 const db = loadDB();
+                if (!db[table]) {
+                    // Auto-seed if table missing (migration simulation)
+                    db[table] = seedData[table] || [];
+                    saveDB(db);
+                }
                 return db[table] || [];
             },
-            getById: (table, id) => {
-                const db = loadDB();
-                return db[table].find(item => item.id == id);
+            find: (table, id) => {
+                const list = loadDB()[table] || [];
+                return list.find(x => x.id == id);
             },
-            create: (table, item) => {
+            insert: (table, item) => {
                 const db = loadDB();
-                if (!db[table]) return false;
-                
-                item.id = Date.now(); // Simple ID generation
-                db[table].unshift(item); // Add to top
+                if (!db[table]) db[table] = [];
+                item.id = item.id || 'GEN-' + Date.now();
+                item.created_at = new Date().toISOString();
+                db[table].unshift(item);
                 saveDB(db);
                 return item;
             },
             update: (table, id, updates) => {
                 const db = loadDB();
-                const index = db[table].findIndex(item => item.id == id);
-                if (index === -1) return false;
-
-                db[table][index] = { ...db[table][index], ...updates };
-                saveDB(db);
-                return db[table][index];
+                const idx = db[table].findIndex(x => x.id == id);
+                if (idx > -1) {
+                    db[table][idx] = { ...db[table][idx], ...updates, updated_at: new Date().toISOString() };
+                    saveDB(db);
+                    return db[table][idx];
+                }
+                return null;
             },
-            delete: (table, id) => {
+            remove: (table, id) => {
                 const db = loadDB();
-                const initialLength = db[table].length;
-                db[table] = db[table].filter(item => item.id != id);
+                const initialLen = db[table].length;
+                db[table] = db[table].filter(x => x.id != id);
                 saveDB(db);
-                return db[table].length < initialLength;
+                return db[table].length < initialLen;
             },
             reset: () => {
                 localStorage.removeItem(DB_KEY);
-                location.reload();
+                window.location.reload();
             }
         },
 
-        // Authentication Logic
+        // Analytics Helper
+        analytics: {
+            getVisitorStats: () => {
+                const logs = loadDB().visitors_logs || [];
+                return {
+                    labels: logs.map(l => l.date),
+                    data: logs.map(l => l.count),
+                    total: logs.reduce((a, b) => a + b.count, 0)
+                };
+            }
+        },
+
+        // Auth Logic
         auth: {
-            login: (username, password) => {
+            login: (u, p) => {
                 const db = loadDB();
-                // Simulation: In real world, password should be hashed before compare
-                const user = db.users.find(u => u.username === username && u.password === password);
+                const user = db.users.find(x => x.username === u && x.password === p);
                 if (user) {
-                    const session = {
-                        id: user.id,
-                        name: user.name,
-                        role: user.role,
-                        token: 'mock_token_' + Date.now()
-                    };
+                    const session = { ...user, token: 'jwt_mock_' + Date.now() };
                     localStorage.setItem(SESSION_KEY, JSON.stringify(session));
-                    return { success: true, user: session };
+                    return { success: true, session };
                 }
-                return { success: false, message: 'Invalid credentials' };
+                return { success: false };
             },
             logout: () => {
                 localStorage.removeItem(SESSION_KEY);
-                window.location.href = 'admin.html'; // Redirect
+                window.location.href = 'admin.html';
             },
-            getSession: () => {
-                return JSON.parse(localStorage.getItem(SESSION_KEY));
-            },
-            requireAuth: () => {
-                const session = JSON.parse(localStorage.getItem(SESSION_KEY));
-                if (!session) {
-                    // Start in login mode
-                    return false; 
-                }
-                return true;
-            }
+            user: () => JSON.parse(localStorage.getItem(SESSION_KEY)),
+            check: () => !!localStorage.getItem(SESSION_KEY)
         }
     };
 })();
