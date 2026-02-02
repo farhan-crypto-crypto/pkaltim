@@ -13,26 +13,32 @@ class DestinationController extends Controller
 {
     public function index()
     {
-        // Pastikan di Model Destination fungsinya bernama 'categories'
-        $destinations = Destination::with('categories')->latest()->paginate(10);
+        // Pastikan relation di Model Destination bernama 'category' (singular) atau 'categories' (plural)
+        // Sesuaikan dengan nama function di App\Models\Destination.php
+        $destinations = Destination::with('categories')->latest()->paginate(10); 
         $categories = Category::all();
 
         $totalDestinations = Destination::count();
-        $totalReviews = 0;
+        // Hitung review jika nanti sudah ada fitur review, sementara 0 dulu
+        $totalReviews = 0;   
 
         return view('admin.Index', compact('destinations', 'categories', 'totalDestinations', 'totalReviews'));
     }
 
     public function store(Request $request)
     {
-        // 1. Validasi
+        // 1. Validasi Input (Tambahkan latitude, longitude, status, opening_hours)
         $request->validate([
-            'name' => 'required|string|max:255',
-            'category_id' => 'required',
-            'description' => 'required',
-            'price' => 'required|numeric',
-            'address' => 'required|string', // Validasi input 'address'
-            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'name'          => 'required|string|max:255',
+            'category_id'   => 'required|exists:categories,id', // Pastikan ID kategori ada di tabel categories
+            'description'   => 'required',
+            'price'         => 'required|numeric',
+            'address'       => 'required|string',
+            'opening_hours' => 'nullable|string',
+            'status'        => 'required|in:active,inactive', // Hanya boleh active atau inactive
+            'latitude'      => 'nullable',
+            'longitude'     => 'nullable',
+            'image'         => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         // 2. Upload Gambar
@@ -41,67 +47,87 @@ class DestinationController extends Controller
             $imagePath = $request->file('image')->store('destinations', 'public');
         }
 
-        // 3. Simpan ke Database
+        // 3. Buat Slug Unik (Sederhana)
+        $slug = Str::slug($request->name);
+        // Jika mau lebih aman dari duplikat, bisa tambahkan time(): $slug . '-' . time();
+
+        // 4. Simpan ke Database
         Destination::create([
-            'name' => $request->name,
-            'slug' => Str::slug($request->name),
-            'category_id' => $request->category_id,
-            'description' => $request->description,
-            'price' => $request->price,
-
-            // --- BAGIAN YANG DIPERBAIKI ---
-            'address' => $request->address, // Dulu $request->location (salah)
-            // ------------------------------
-
-            'image' => $imagePath,
+            'name'          => $request->name,
+            'slug'          => $slug,
+            'category_id'   => $request->category_id,
+            'description'   => $request->description,
+            'price'         => $request->price,
+            'address'       => $request->address,
+            'opening_hours' => $request->opening_hours, // BARU
+            'status'        => $request->status,        // BARU
+            'latitude'      => $request->latitude,      // BARU
+            'longitude'     => $request->longitude,     // BARU
+            'image'         => $imagePath,
         ]);
 
-        return redirect()->back()->with('success', 'Destinasi berhasil ditambahkan!');
+        return redirect()->route('admin.destinations.index')->with('success', 'Destinasi berhasil ditambahkan!');
     }
 
     public function update(Request $request, $id)
     {
         $destination = Destination::findOrFail($id);
 
+        // 1. Validasi Update
         $request->validate([
-            'name' => 'required|string|max:255',
-            'category_id' => 'required',
-            'description' => 'required',
-            'price' => 'required|numeric',
-            'address' => 'required|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'name'          => 'required|string|max:255',
+            'category_id'   => 'required|exists:categories,id',
+            'description'   => 'required',
+            'price'         => 'required|numeric',
+            'address'       => 'required|string',
+            'opening_hours' => 'nullable|string',
+            'status'        => 'required|in:active,inactive',
+            'latitude'      => 'nullable',
+            'longitude'     => 'nullable',
+            'image'         => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        $data = [
-            'name' => $request->name,
-            'slug' => Str::slug($request->name),
-            'category_id' => $request->category_id,
-            'description' => $request->description,
-            'price' => $request->price,
+        // 2. Cek apakah nama berubah? Jika ya, update slug
+        $slug = $destination->slug;
+        if($request->name != $destination->name){
+            $slug = Str::slug($request->name);
+        }
 
-            // --- BAGIAN YANG DIPERBAIKI ---
-            'address' => $request->address, // Dulu $request->location (salah)
-            // ------------------------------
+        // 3. Siapkan data update
+        $data = [
+            'name'          => $request->name,
+            'slug'          => $slug,
+            'category_id'   => $request->category_id,
+            'description'   => $request->description,
+            'price'         => $request->price,
+            'address'       => $request->address,
+            'opening_hours' => $request->opening_hours, // BARU
+            'status'        => $request->status,        // BARU
+            'latitude'      => $request->latitude,      // BARU
+            'longitude'     => $request->longitude,     // BARU
         ];
 
-        // Cek jika ganti gambar
+        // 4. Handle Gambar (Jika user upload baru)
         if ($request->hasFile('image')) {
-            if ($destination->image) {
+            // Hapus gambar lama jika ada
+            if ($destination->image && Storage::disk('public')->exists($destination->image)) {
                 Storage::disk('public')->delete($destination->image);
             }
+            // Simpan yang baru
             $data['image'] = $request->file('image')->store('destinations', 'public');
         }
 
+        // 5. Eksekusi Update
         $destination->update($data);
 
-        return redirect()->back()->with('success', 'Destinasi berhasil diperbarui!');
+        return redirect()->route('admin.destinations.index')->with('success', 'Destinasi berhasil diperbarui!');
     }
 
     public function destroy($id)
     {
         $destination = Destination::findOrFail($id);
-
-        if ($destination->image) {
+        
+        if ($destination->image && Storage::disk('public')->exists($destination->image)) {
             Storage::disk('public')->delete($destination->image);
         }
 

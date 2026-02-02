@@ -5,7 +5,9 @@ use App\Http\Controllers\PublicController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DestinationController;
-use App\Http\Controllers\DestinationController as PublicDestinationController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\FacilityController;
+use App\Http\Controllers\Admin\DestinationImageController; // Pastikan ini di-import
 
 /*
 |--------------------------------------------------------------------------
@@ -13,15 +15,8 @@ use App\Http\Controllers\DestinationController as PublicDestinationController;
 |--------------------------------------------------------------------------
 */
 Route::get('/', [PublicController::class, 'landing'])->name('landing');
-
-// Halaman List Wisata (URL: /destination)
 Route::get('/destination', [PublicController::class, 'index'])->name('destination.index');
-
-// Halaman Detail Wisata (URL: /destination/nama-slug)
-// Route::get('/destination/{slug}', [PublicController::class, 'show'])->name('destination.show');
-Route::get('/destinations/{slug}', [PublicDestinationController::class, 'show'])->name('destinations.show');
-
-// Kirim Review
+Route::get('/destination/{slug}', [PublicController::class, 'show'])->name('destination.show');
 Route::post('/review/{id}', [PublicController::class, 'storeReview'])->name('review.store');
 
 /*
@@ -37,18 +32,29 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 |--------------------------------------------------------------------------
 | BAGIAN ADMIN
 |--------------------------------------------------------------------------
-| Menggunakan prefix 'admin' dan name 'admin.'
+| Group ini sudah otomatis menambahkan:
+| 1. URL awalan '/admin'
+| 2. Nama route awalan 'admin.'
 */
 Route::prefix('admin')->middleware(['auth'])->name('admin.')->group(function () {
 
-    // 1. Dashboard Admin
-    // URL Browser: http://127.0.0.1:8000/admin/dashboard
-    // Route Name: admin.dashboard
-    Route::get('admin/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    // 1. Dashboard
+    // URL Jadi: /admin/dashboard
+    // Name Jadi: admin.dashboard
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // 2. Kelola Destinasi (CRUD)
-    // URL Browser: http://127.0.0.1:8000/admin/destinations
-    // Route Name: admin.destinations.index (dan turunannya)
+    // 2. Resource Controllers (Hapus 'admin/' di depannya)
+    // URL Jadi: /admin/destinations
+    // Name Jadi: admin.destinations.index, admin.destinations.create, dst.
     Route::resource('admin/destinations', DestinationController::class);
+    Route::resource('admin/category', CategoryController::class);
+    Route::resource('admin/facility', FacilityController::class);
+    
+    Route::get('gallery/selection', [DestinationImageController::class, 'selectionList'])->name('gallery.selection');
 
+    // 2. Halaman Kelola Foto (CRUD per ID Destinasi)
+    Route::get('gallery/{id}/manage', [DestinationImageController::class, 'index'])->name('gallery.index'); // Menampilkan form upload & grid
+    Route::post('gallery/{id}/store', [DestinationImageController::class, 'store'])->name('gallery.store'); // Proses Upload
+    Route::delete('gallery/{id}/destroy', [DestinationImageController::class, 'destroy'])->name('gallery.destroy'); // Hapus Foto
+    Route::put('gallery/{id}/primary', [DestinationImageController::class, 'setPrimary'])->name('gallery.primary'); // Set Thumbnail
 });

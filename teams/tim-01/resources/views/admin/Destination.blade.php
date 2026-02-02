@@ -31,15 +31,27 @@
                 </div>
 
                 <nav class="mt-8 px-4 space-y-2">
-                    <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-all">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
-                        <span>Dashboard</span>
-                    </a>
-                    <a href="{{ route('admin.destinations.index') }}" class="flex items-center gap-3 px-4 py-3 bg-active rounded-lg text-white shadow-lg shadow-green-900/50 transition-all">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-8a2 2 0 012-2h14a2 2 0 012 2v8M16 10l-4-4-4 4m4-4v13"></path></svg>
-                        <span class="font-medium">Destinasi</span>
-                    </a>
-                </nav>
+                        <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-all">
+                            <i class="fa-solid fa-chart-pie w-5"></i>
+                            <span>Dashboard</span>
+                        </a>
+                        <a href="{{ route('admin.destinations.index') }}" class="flex items-center gap-3 px-4 py-3 bg-active rounded-lg text-white shadow-lg shadow-green-900/50 transition-all">
+                            <i class="fa-solid fa-map-location-dot w-5"></i>
+                            <span class="font-medium">Destinasi</span>
+                        </a>
+                        <a href="{{ route('admin.category.index') }}" class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-all">
+                            <i class="fa-solid fa-tags w-5"></i>
+                            <span class="font-medium">Kategori</span>
+                        </a>
+                        <a href="{{ route('admin.gallery.selection') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('admin.gallery.*') ? 'bg-green-600 text-white shadow-lg shadow-green-900/50' : 'text-gray-400 hover:text-white hover:bg-white/10' }}">
+                            <i class="fa-solid fa-images w-5"></i>
+                            <span class="font-medium">Galeri Wisata</span>
+                        </a>
+                        <a href="{{ route('admin.facility.index') }}" class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-all">
+                            <i class="fa-solid fa-bell-concierge w-5"></i>
+                            <span class="font-medium">Fasilitas</span>
+                        </a>
+                    </nav>
             </div>
             
             <div class="p-4 border-t border-gray-700/30">
@@ -87,15 +99,6 @@
                             <h3 class="text-3xl font-bold text-gray-800">{{ $totalDestinations }}</h3>
                         </div>
                     </div>
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-6 hover:shadow-md transition-shadow">
-                        <div class="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-500">
-                            <i class="fa-solid fa-comments text-2xl"></i>
-                        </div>
-                        <div>
-                            <p class="text-sm font-medium text-gray-500 mb-1">Total Ulasan</p>
-                            <h3 class="text-3xl font-bold text-gray-800">{{ $totalReviews }}</h3>
-                        </div>
-                    </div>
                 </div>
                 
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
@@ -103,7 +106,9 @@
                         <table class="w-full text-left border-collapse">
                             <thead class="bg-gray-50">
                                 <tr>
+                                    <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase w-10">No</th>
                                     <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase">Nama Wisata</th>
+                                    <th class="px- py-4 text-xs font-semibold text-gray-500 uppercase">Status</th>
                                     <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase">Kategori</th>
                                     <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase">Lokasi</th>
                                     <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase">Jam Buka</th>
@@ -116,24 +121,21 @@
                                 <tr class="hover:bg-gray-50 transition-colors">
                                     <td class="px-6 py-4">
                                         <div class="flex items-center gap-4">
-                                            @if($item->image)
-                                                <img src="{{ asset('storage/' . $item->image) }}" class="w-12 h-12 rounded-lg object-cover border border-gray-200">
-                                            @else
-                                                <div class="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center text-xs text-gray-500">No Pic</div>
-                                            @endif
                                             <div>
                                                 <span class="block font-semibold text-gray-800">{{ $item->name }}</span>
-                                                @if($item->status == 'active')
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @if($item->status == 'active')
                                                     <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">Aktif</span>
                                                 @else
                                                     <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-100 text-red-800">Nonaktif</span>
                                                 @endif
-                                            </div>
-                                        </div>
                                     </td>
                                     <td class="px-6 py-4 text-sm text-gray-600">
                                         <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">
-                                            {{ $item->categories->name ?? 'Umum' }}
+                                            {{ $item->categories->name}}
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 text-sm text-gray-600 truncate max-w-[150px]" title="{{ $item->address ?? $item->location }}">{{ $item->address ?? $item->location }}</td>
@@ -238,11 +240,6 @@
                     <textarea name="description" rows="3" required class="w-full rounded-lg border-gray-300 border p-2.5 focus:border-green-500"></textarea>
                 </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Foto Destinasi</label>
-                    <input type="file" name="image" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:bg-green-50 file:text-green-700 transition">
-                </div>
-
                 <div class="pt-4 flex justify-end gap-3">
                     <button type="button" onclick="toggleModal('createModal')" class="px-5 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">Batal</button>
                     <button type="submit" class="px-5 py-2.5 bg-active text-white rounded-lg hover:bg-green-700">Simpan Data</button>
@@ -319,11 +316,6 @@
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
                     <textarea id="edit_description" name="description" rows="3" required class="w-full rounded-lg border-gray-300 border p-2.5 focus:border-green-500"></textarea>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Ganti Foto (Opsional)</label>
-                    <input type="file" name="image" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:bg-green-50 file:text-green-700 transition">
                 </div>
 
                 <div class="pt-4 flex justify-end gap-3">

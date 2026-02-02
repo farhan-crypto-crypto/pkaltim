@@ -14,18 +14,19 @@ class Destination extends Model
 
     // 1. Kolom yang bisa diisi (Wajib sama dengan Controller)
     protected $fillable = [
-        'category_id',
-        'name',
-        'slug',
-        'description',
-        'address',      // <--- Pastikan ini ada
-        'price',
-        'price_note',
-        'latitude',
-        'longitude',
-        'opening_hours',
-        'image',        // <--- Pastikan ini ada juga
-    ];
+    'category_id',
+    'name',
+    'slug',
+    'description',
+    'address',      // <--- Pastikan ini ada
+    'price',
+    'status',
+    'price_note',
+    'latitude',
+    'longitude',
+    'opening_hours',
+    'image',        // <--- Pastikan ini ada juga
+];
 
     // ==========================
     // RELASI DATABASE

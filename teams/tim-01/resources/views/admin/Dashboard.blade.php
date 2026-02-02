@@ -49,25 +49,27 @@
                 </div>
 
                 <nav class="mt-8 px-4 space-y-2">
-                    <a href="{{ route('admin.dashboard') }}"
-                        class="flex items-center gap-3 px-4 py-3 bg-active rounded-lg text-white shadow-lg shadow-green-900/50 transition-all">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z">
-                            </path>
-                        </svg>
-                        <span class="font-medium">Dashboard</span>
-                    </a>
-
-                    <a href="{{ route('admin.destinations.index') }}"
-                        class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-all">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M3 21v-8a2 2 0 012-2h14a2 2 0 012 2v8M16 10l-4-4-4 4m4-4v13"></path>
-                        </svg>
-                        <span>Destinasi</span>
-                    </a>
-                </nav>
+                        <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-4 py-3 bg-active rounded-lg text-white shadow-lg shadow-green-900/50 transition-all">
+                            <i class="fa-solid fa-chart-pie w-5"></i>
+                            <span>Dashboard</span>
+                        </a>
+                        <a href="{{ route('admin.destinations.index') }}" class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-all">
+                            <i class="fa-solid fa-map-location-dot w-5"></i>
+                            <span class="font-medium">Destinasi</span>
+                        </a>
+                        <a href="{{ route('admin.category.index') }}" class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-all">
+                            <i class="fa-solid fa-tags w-5"></i>
+                            <span class="font-medium">Kategori</span>
+                        </a>
+                        <a href="{{ route('admin.gallery.selection') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('admin.gallery.*') ? 'bg-green-600 text-white shadow-lg shadow-green-900/50' : 'text-gray-400 hover:text-white hover:bg-white/10' }}">
+                            <i class="fa-solid fa-images w-5"></i>
+                            <span class="font-medium">Galeri Wisata</span>
+                        </a>
+                        <a href="{{ route('admin.facility.index') }}" class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-all">
+                            <i class="fa-solid fa-bell-concierge w-5"></i>
+                            <span class="font-medium">Fasilitas</span>
+                        </a>
+                    </nav>
             </div>
 
             <div class="p-4 border-t border-gray-700/30">
@@ -141,7 +143,34 @@
                             <h3 class="text-3xl font-bold text-gray-800">{{ $totalReviews }}</h3>
                         </div>
                     </div>
-
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-6 hover:shadow-md transition-shadow">
+                        <div class="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-500">
+                            <i class="fa-solid fa-tags text-2xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-500 mb-1">Total Category</p>
+                            <h3 class="text-3xl font-bold text-gray-800">{{ $totalCategory }}</h3>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-6 hover:shadow-md transition-shadow">
+                        <div class="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-500">
+                            <i class="fa-solid fa-images text-2xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-500 mb-1">Total Image</p>
+                            <h3 class="text-3xl font-bold text-gray-800">{{ $totalImage }}</h3>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-6 hover:shadow-md transition-shadow">
+                        <div class="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-500">
+                            <i class="fa-solid fa-bell text-2xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-500 mb-1">Total Facility</p>
+                            <h3 class="text-3xl font-bold text-gray-800">{{ $totalFacility }}</h3>
+                        </div>
+                    </div>
+                    
                 </div>
 
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-12 text-center">

@@ -2,60 +2,57 @@
 
 namespace App\Http\Controllers\Admin;
 
-//package imports
-use Illuminate\Routing\Controller;
-use App\Models\Facility;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Facility;
 
 class FacilityController extends Controller
 {
+    // Menampilkan daftar fasilitas
     public function index()
     {
-        $facilities = Facility::latest()->get();
-        return view('admin.facilities.index', compact('facilities'));
+        $facilities = Facility::latest()->paginate(10);
+        return view('admin.Facility', compact('facilities'));
     }
 
-    public function create()
-    {
-        return view('admin.facilities.create');
-    }
-
+    // Menyimpan fasilitas baru
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:50',
-            'icon_class' => 'nullable|string|max:50' // Contoh: fa-solid fa-wifi
+            'name'       => 'required|string|max:255',
+            'icon_class' => 'required|string|max:255', // User input kode icon fontawesome
         ]);
 
         Facility::create($request->all());
 
-        return redirect()->route('facilities.index')->with('success', 'Fasilitas berhasil ditambahkan.');
+        return redirect()->back()->with('success', 'Fasilitas berhasil ditambahkan!');
     }
 
-    public function edit($id)
-    {
-        $facility = Facility::findOrFail($id);
-        return view('admin.facilities.edit', compact('facility'));
-    }
-
+    // Update fasilitas
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required|string|max:50',
-            'icon_class' => 'nullable|string|max:50'
+            'name'       => 'required|string|max:255',
+            'icon_class' => 'required|string|max:255',
         ]);
 
         $facility = Facility::findOrFail($id);
         $facility->update($request->all());
 
-        return redirect()->route('facilities.index')->with('success', 'Fasilitas berhasil diperbarui.');
+        return redirect()->back()->with('success', 'Fasilitas berhasil diperbarui!');
     }
 
+    // Hapus fasilitas
     public function destroy($id)
     {
         $facility = Facility::findOrFail($id);
+        
+        // Opsional: Cek dulu apakah fasilitas ini sedang dipakai oleh destinasi wisata?
+        // Jika ingin maksa hapus (cascade), biarkan saja. 
+        // Tapi di database sebaiknya setting Foreign Key 'ON DELETE CASCADE' di tabel pivot.
+        
         $facility->delete();
 
-        return redirect()->route('facilities.index')->with('success', 'Fasilitas berhasil dihapus.');
+        return redirect()->back()->with('success', 'Fasilitas berhasil dihapus!');
     }
 }
