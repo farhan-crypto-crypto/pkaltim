@@ -23,8 +23,16 @@ class PublicController extends Controller
             ->take(4) // Cukup ambil 4 untuk tampilan awal
             ->get();
 
+        // Mengambil 5 gambar acak dari semua destinasi aktif untuk galeri slider
+        $galleryImages = \App\Models\DestinationImage::whereHas('destination', function ($q) {
+            $q->where('status', 'active');
+        })
+            ->inRandomOrder()
+            ->take(5)
+            ->get();
+
         // Mengirim data ke LandingPage.blade.php
-        return view('public.LandingPage', compact('destinations'));
+        return view('public.LandingPage', compact('destinations', 'galleryImages'));
     }
 
     /**
@@ -58,8 +66,19 @@ class PublicController extends Controller
             ->where('slug', $slug)
             ->firstOrFail();
 
+        // Navigasi Next/Prev (Berdasarkan ID)
+        $nextDestination = Destination::where('id', '>', $destination->id)
+            ->where('status', 'active')
+            ->orderBy('id', 'asc')
+            ->first();
+
+        $prevDestination = Destination::where('id', '<', $destination->id)
+            ->where('status', 'active')
+            ->orderBy('id', 'desc')
+            ->first();
+
         // SAYA UBAH: dari 'front.detail' ke 'public.detail' agar konsisten satu folder
-        return view('public.detail', compact('destination'));
+        return view('public.detail', compact('destination', 'nextDestination', 'prevDestination'));
     }
 
     /**
@@ -68,12 +87,6 @@ class PublicController extends Controller
      */
     public function storeReview(Request $request, $id)
     {
-        // 1. Cek apakah user sudah pernah review di destinasi ini (via Cookie)
-        $cookieName = 'reviewed_destination_' . $id;
-        if ($request->hasCookie($cookieName)) {
-            return back()->with('error', 'Anda hanya bisa mengirimkan 1 komentar per destinasi.');
-        }
-
         $request->validate([
             'visitor_name' => 'required|string|max:255',
             'rating' => 'required|integer|min:1|max:5',
@@ -91,12 +104,7 @@ class PublicController extends Controller
             'status' => 'pending' // Default pending agar dicek admin dulu
         ]);
 
-        // 2. Buat cookie agar user tidak bisa review lagi (berlaku 1 tahun)
-        // 525600 menit = 1 tahun
-        $cookie = cookie($cookieName, 'true', 525600);
-
         return back()
-            ->withCookie($cookie)
             ->with('success', 'Komentarmu sedang dalam proses, terimakasih atas komentarnya!');
     }
 }

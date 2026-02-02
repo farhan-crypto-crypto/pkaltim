@@ -38,6 +38,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
         body {
@@ -57,7 +59,7 @@
 <body class="bg-[#F8F9FA] dark:bg-gray-900 text-gray-800 dark:text-gray-200 antialiased flex flex-col min-h-screen">
 
     <!-- Navbar -->
-    <nav
+    <nav x-data="{ mobileMenuOpen: false }"
         class="fixed w-full z-50 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md shadow-sm border-b border-gray-100 dark:border-gray-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex justify-between items-center">
 
@@ -76,13 +78,11 @@
                     class="text-sm font-medium hover:text-brand-500 dark:hover:text-brand-400">Beranda</a>
                 <a href="{{ route('destination.index') }}"
                     class="text-sm font-medium hover:text-brand-500 dark:hover:text-brand-400">Destinasi</a>
-                <a href="#" class="text-sm font-medium hover:text-brand-500 dark:hover:text-brand-400">Tentang</a>
             </div>
 
             <!-- Right Side (Auth & Dark Mode) -->
             <div class="flex items-center gap-4">
-                <!-- Limit access to 'admin' links via simple auth check if needed, mostly handled by Middleware -->
-
+                
                 <!-- Dark Mode Toggle -->
                 <button id="theme-toggle"
                     class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 transition-colors">
@@ -98,6 +98,27 @@
 
                 <a href="{{ route('login') }}"
                     class="hidden md:block bg-brand-500 hover:bg-brand-600 text-white px-5 py-2 rounded-full text-sm font-bold shadow-lg shadow-brand-500/30 transition-transform hover:-translate-y-0.5">
+                    Masuk
+                </a>
+
+                <!-- Mobile Menu Button -->
+                <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden text-gray-500 hover:text-brand-500 focus:outline-none">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div x-show="mobileMenuOpen" x-collapse
+             class="md:hidden bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 absolute w-full left-0 top-20 shadow-lg">
+            <div class="px-4 py-6 space-y-4">
+                <a href="{{ route('landing') }}" class="block text-base font-medium text-gray-700 dark:text-gray-300 hover:text-brand-500 dark:hover:text-brand-400">
+                    Beranda
+                </a>
+                <a href="{{ route('destination.index') }}" class="block text-base font-medium text-gray-700 dark:text-gray-300 hover:text-brand-500 dark:hover:text-brand-400">
+                    Destinasi
+                </a>
+                <a href="{{ route('login') }}" class="block w-full text-center bg-brand-500 hover:bg-brand-600 text-white px-5 py-3 rounded-xl text-base font-bold shadow-lg shadow-brand-500/30 transition-transform hover:-translate-y-0.5">
                     Masuk
                 </a>
             </div>
@@ -124,7 +145,8 @@
                                 class="text-brand-500">Kaltim</span></span>
                     </a>
                     <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed max-w-sm">
-                        Situs informasi pariwisata yang didedikasikan untuk memperkenalkan potensi alam Kalimantan Timur, menghubungkan wisatawan dengan destinasi lokal.
+                        Situs informasi pariwisata yang didedikasikan untuk memperkenalkan potensi alam Kalimantan
+                        Timur, menghubungkan wisatawan dengan destinasi lokal.
                     </p>
                     <div class="flex space-x-4 pt-2">
                         <a href="#"
@@ -147,17 +169,15 @@
                         <li><a href="{{ route('landing') }}" class="hover:text-brand-500 transition">Beranda</a></li>
                         <li><a href="{{ route('destination.index') }}" class="hover:text-brand-500 transition">Semua
                                 Destinasi</a></li>
-                        <li><a href="#" class="hover:text-brand-500 transition">Peta Wisata</a></li>
-                        <li><a href="#" class="hover:text-brand-500 transition">Artikel & Blog</a></li>
                     </ul>
                 </div>
-                
 
-            <div
-                class="border-t border-gray-100 dark:border-gray-800 pt-8 flex flex-col md:flex-row items-center justify-between text-xs text-gray-400">
-                <p>© 2026 Wisata Kaltim (Kelompok 1). All rights reserved.</p>
+
+                <div
+                    class="border-t border-gray-100 dark:border-gray-800 pt-8 flex flex-col md:flex-row items-center justify-between text-xs text-gray-400">
+                    <p>© 2026 Wisata Kaltim (Kelompok 1). All rights reserved.</p>
+                </div>
             </div>
-        </div>
     </footer>
 
     <!-- Dark Mode Logic Script -->
@@ -198,6 +218,15 @@
                     }
                 }
             });
+        });
+    </script>
+
+    <!-- AOS Animation Library -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            once: true,
+            duration: 800,
         });
     </script>
 </body>

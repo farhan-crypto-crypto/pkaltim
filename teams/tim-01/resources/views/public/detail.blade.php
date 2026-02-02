@@ -4,25 +4,21 @@
 
 @section('content')
     <!-- 
-              DESIGN IMPLEMENTATION:
-              - Primary Dark: #0B3B2D
-              - Accent: #22c55e
-              - Font: Inter (via Layout)
-            -->
+                                          DESIGN IMPLEMENTATION:
+                                          - Primary Dark: #0B3B2D
+                                          - Accent: #22c55e
+                                          - Font: Inter (via Layout)
+                                        -->
 
     <!-- 1. Hero Section (Edge-to-Edge) -->
     <div class="relative w-full h-[85vh] min-h-[600px] bg-gray-900 overflow-hidden">
         <!-- Background Image -->
         @php
-            $heroImage = 'https://images.unsplash.com/photo-1596401057633-565652f56878?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80';
-            // Use seeded image if available
-            if ($destination->images && $destination->images->count() > 0) {
-                $heroImage = asset('storage/' . $destination->images->first()->path);
-            }
+            $heroImage = $destination->thumbnail;
 
             // Calculate dynamic rating for Hero
-            $avgRating = $destination->reviews->avg('rating') ?? 0;
-            $totalReviews = $destination->reviews->count();
+            $avgRating = $destination->approvedReviews->avg('rating') ?? 0;
+            $totalReviews = $destination->approvedReviews->count();
         @endphp
         <img src="{{ $heroImage }}" alt="{{ $destination->name }}"
             class="absolute inset-0 w-full h-full object-cover opacity-90">
@@ -32,7 +28,7 @@
 
         <!-- Content -->
         <div class="absolute inset-0 flex flex-col justify-end pb-20">
-            <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 relative">
+            <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 relative" data-aos="fade-up" data-aos-delay="200">
 
                 <!-- Breadcrumbs/Tag -->
                 <div class="mb-6 flex items-center space-x-3 text-sm font-medium text-white/80">
@@ -68,15 +64,23 @@
                 </div>
 
                 <!-- Navigation Arrows (Bottom Left) -->
+                <!-- Navigation Arrows (Bottom Left) -->
                 <div class="hidden md:flex absolute bottom-0 right-4 lg:right-8 gap-4 translate-y-1/2 z-10">
-                    <button
-                        class="w-14 h-14 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-[#22c55e] hover:border-[#22c55e] transition-all duration-300 group">
-                        <i class="fa-solid fa-arrow-left group-hover:-translate-x-1 transition-transform"></i>
-                    </button>
-                    <button
-                        class="w-14 h-14 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-[#22c55e] hover:border-[#22c55e] transition-all duration-300 group">
-                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
-                    </button>
+                    @if($prevDestination)
+                        <a href="{{ route('destination.show', $prevDestination->slug) }}"
+                            class="w-14 h-14 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-[#22c55e] hover:border-[#22c55e] transition-all duration-300 group"
+                            title="Sebelumnya: {{ $prevDestination->name }}">
+                            <i class="fa-solid fa-arrow-left group-hover:-translate-x-1 transition-transform"></i>
+                        </a>
+                    @endif
+
+                    @if($nextDestination)
+                        <a href="{{ route('destination.show', $nextDestination->slug) }}"
+                            class="w-14 h-14 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-[#22c55e] hover:border-[#22c55e] transition-all duration-300 group"
+                            title="Selanjutnya: {{ $nextDestination->name }}">
+                            <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+                    @endif
                 </div>
             </div>
         </div>
@@ -90,7 +94,7 @@
             <div class="lg:col-span-2 space-y-12">
 
                 <!-- Description -->
-                <section>
+                <section data-aos="fade-up" data-aos-delay="300">
                     <h2 class="text-2xl font-bold text-[#0B3B2D] mb-6 flex items-center gap-3">
                         <span class="w-8 h-1 bg-[#22c55e] rounded-full"></span>
                         Tentang Destinasi
@@ -101,7 +105,7 @@
                 </section>
 
                 <!-- Facilities Grid -->
-                <section>
+                <section data-aos="fade-up" data-aos-delay="400">
                     <h2 class="text-2xl font-bold text-[#0B3B2D] mb-6 flex items-center gap-3">
                         <span class="w-8 h-1 bg-[#22c55e] rounded-full"></span>
                         Fasilitas
@@ -112,23 +116,49 @@
                                 class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center justify-center gap-3 hover:shadow-md transition-shadow group">
                                 <div
                                     class="w-12 h-12 rounded-full bg-[#ecfdf5] flex items-center justify-center text-[#105e43] group-hover:bg-[#0B3B2D] group-hover:text-white transition-colors duration-300">
-                                    <i class="fa-solid {{ $facility['icon'] }} text-lg"></i>
+                                    <i class="fa-solid {{ $facility->icon_class }} text-lg"></i>
                                 </div>
-                                <span class="text-sm font-medium text-gray-700 text-center">{{ $facility['label'] }}</span>
+                                <span class="text-sm font-medium text-gray-700 text-center">{{ $facility->name }}</span>
                             </div>
                         @endforeach
                     </div>
                 </section>
 
+                <!-- Photo Gallery Grid -->
+                @if($destination->images->count() > 0)
+                    <section data-aos="fade-up" data-aos-delay="450">
+                        <h2 class="text-2xl font-bold text-[#0B3B2D] mb-6 flex items-center gap-3">
+                            <span class="w-8 h-1 bg-[#22c55e] rounded-full"></span>
+                            Galeri {{ $destination->name }}
+                        </h2>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                            @foreach($destination->images as $image)
+                                <div
+                                    class="rounded-xl overflow-hidden h-40 md:h-52 shadow-sm border border-gray-100 group relative">
+                                    <img src="{{ asset('storage/' . $image->image_path) }}" alt="Galeri {{ $destination->name }}"
+                                        class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                                    <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition duration-300"></div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </section>
+                @endif
+
                 <!-- Map Section -->
-                <section>
+                <section data-aos="fade-up" data-aos-delay="500">
                     <h2 class="text-2xl font-bold text-[#0B3B2D] mb-6 flex items-center gap-3">
                         <span class="w-8 h-1 bg-[#22c55e] rounded-full"></span>
                         Lokasi Maps
                     </h2>
                     <div class="w-full h-80 bg-gray-200 rounded-2xl overflow-hidden relative shadow-inner">
+                        @php
+                            $mapQuery = $destination->address ?? 'Kalimantan Timur';
+                            if ($destination->latitude && $destination->longitude) {
+                                $mapQuery = $destination->latitude . ',' . $destination->longitude;
+                            }
+                        @endphp
                         <iframe width="100%" height="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"
-                            src="https://maps.google.com/maps?q={{ urlencode($destination->address ?? 'Kalimantan Timur') }}&t=&z=13&ie=UTF8&iwloc=&output=embed">
+                            src="https://maps.google.com/maps?q={{ urlencode($mapQuery) }}&t=&z=13&ie=UTF8&iwloc=&output=embed">
                         </iframe>
                         <div
                             class="absolute bottom-4 right-4 bg-white px-4 py-2 rounded-lg shadow-lg text-xs font-bold text-gray-700">
@@ -138,7 +168,7 @@
                 </section>
 
                 <!-- Reviews -->
-                <section>
+                <section data-aos="fade-up" data-aos-delay="600">
                     <h2 class="text-2xl font-bold text-[#0B3B2D] mb-6 flex items-center gap-3">
                         <span class="w-8 h-1 bg-[#22c55e] rounded-full"></span>
                         Tulis Ulasan
@@ -158,50 +188,52 @@
                         </div>
                     @endif
 
-                    <!-- Review Form -->
-                    <form action="{{ route('review.store', $destination->id) }}" method="POST"
-                        class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm mb-12">
-                        @csrf
-                        <div class="space-y-4">
-                            <!-- Name -->
-                            <div>
-                                <label for="visitor_name" class="block text-sm font-medium text-gray-700 mb-1">Nama
-                                    Anda</label>
-                                <input type="text" name="visitor_name" id="visitor_name" required
-                                    class="w-full rounded-xl border-gray-300 focus:border-[#22c55e] focus:ring focus:ring-[#22c55e]/20 transition-colors"
-                                    placeholder="Masukkan nama lengkap">
-                            </div>
-
-                            <!-- Rating -->
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Rating</label>
-                                <div class="flex gap-2">
-                                    <select name="rating" required
-                                        class="w-full sm:w-auto rounded-xl border-gray-300 focus:border-[#22c55e] focus:ring focus:ring-[#22c55e]/20 transition-colors">
-                                        <option value="5">⭐⭐⭐⭐⭐ (Sangat Bagus)</option>
-                                        <option value="4">⭐⭐⭐⭐ (Bagus)</option>
-                                        <option value="3">⭐⭐⭐ (Cukup)</option>
-                                        <option value="2">⭐⭐ (Kurang)</option>
-                                        <option value="1">⭐ (Sangat Kurang)</option>
-                                    </select>
+                    @if(!session('success'))
+                        <!-- Review Form -->
+                        <form action="{{ route('review.store', $destination->id) }}" method="POST"
+                            class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm mb-12">
+                            @csrf
+                            <div class="space-y-4">
+                                <!-- Name -->
+                                <div>
+                                    <label for="visitor_name" class="block text-sm font-medium text-gray-700 mb-1">Nama
+                                        Anda</label>
+                                    <input type="text" name="visitor_name" id="visitor_name" required
+                                        class="w-full rounded-xl border-gray-300 focus:border-[#22c55e] focus:ring focus:ring-[#22c55e]/20 transition-colors"
+                                        placeholder="Masukkan nama lengkap">
                                 </div>
-                            </div>
 
-                            <!-- Comment -->
-                            <div>
-                                <label for="comment" class="block text-sm font-medium text-gray-700 mb-1">Komentar</label>
-                                <textarea name="comment" id="comment" rows="4" required
-                                    class="w-full rounded-xl border-gray-300 focus:border-[#22c55e] focus:ring focus:ring-[#22c55e]/20 transition-colors"
-                                    placeholder="Bagikan pengalaman Anda..."></textarea>
-                            </div>
+                                <!-- Rating -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Rating</label>
+                                    <div class="flex gap-2">
+                                        <select name="rating" required
+                                            class="w-full sm:w-auto rounded-xl border-gray-300 focus:border-[#22c55e] focus:ring focus:ring-[#22c55e]/20 transition-colors">
+                                            <option value="5">⭐⭐⭐⭐⭐ (Sangat Bagus)</option>
+                                            <option value="4">⭐⭐⭐⭐ (Bagus)</option>
+                                            <option value="3">⭐⭐⭐ (Cukup)</option>
+                                            <option value="2">⭐⭐ (Kurang)</option>
+                                            <option value="1">⭐ (Sangat Kurang)</option>
+                                        </select>
+                                    </div>
+                                </div>
 
-                            <button type="submit"
-                                class="w-full bg-[#0B3B2D] text-white font-bold py-3 px-6 rounded-xl hover:bg-[#072d22] transition-colors flex items-center justify-center gap-2">
-                                <i class="fa-regular fa-paper-plane"></i>
-                                Kirim Ulasan
-                            </button>
-                        </div>
-                    </form>
+                                <!-- Comment -->
+                                <div>
+                                    <label for="comment" class="block text-sm font-medium text-gray-700 mb-1">Komentar</label>
+                                    <textarea name="comment" id="comment" rows="4" required
+                                        class="w-full rounded-xl border-gray-300 focus:border-[#22c55e] focus:ring focus:ring-[#22c55e]/20 transition-colors"
+                                        placeholder="Bagikan pengalaman Anda..."></textarea>
+                                </div>
+
+                                <button type="submit"
+                                    class="w-full bg-[#0B3B2D] text-white font-bold py-3 px-6 rounded-xl hover:bg-[#072d22] transition-colors flex items-center justify-center gap-2">
+                                    <i class="fa-regular fa-paper-plane"></i>
+                                    Kirim Ulasan
+                                </button>
+                            </div>
+                        </form>
+                    @endif
 
                     <h2 class="text-2xl font-bold text-[#0B3B2D] mb-8 flex items-center gap-3">
                         <span class="w-8 h-1 bg-[#22c55e] rounded-full"></span>
@@ -231,7 +263,7 @@
                         <div class="flex-1 w-full space-y-3">
                             @foreach([5, 4, 3, 2, 1] as $star)
                                 @php
-                                    $count = $destination->reviews->where('rating', $star)->count();
+                                    $count = $destination->approvedReviews->where('rating', $star)->count();
                                     $percentage = $totalReviews > 0 ? ($count / $totalReviews) * 100 : 0;
                                 @endphp
                                 <div class="flex items-center gap-4">
@@ -239,7 +271,8 @@
                                     <div class="flex-1 h-3 bg-gray-100 rounded-full overflow-hidden">
                                         <div class="h-full bg-[#22c55e] rounded-full" style="width: {{ $percentage }}%"></div>
                                     </div>
-                                    <span class="text-xs text-gray-400 w-6 text-right">{{ $count }}</span>
+                                    <span No new commits yet. Enjoy your day!
+                                        class="text-xs text-gray-400 w-6 text-right">{{ $count }}</span>
                                 </div>
                             @endforeach
                         </div>
@@ -247,7 +280,7 @@
 
                     <!-- Review Cards List -->
                     <div class="space-y-6">
-                        @foreach($destination->reviews as $review)
+                        @foreach($destination->approvedReviews as $review)
                             <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex gap-4">
                                 <img src="https://ui-avatars.com/api/?name={{ urlencode($review->visitor_name) }}&background=0B3B2D&color=fff"
                                     class="w-12 h-12 rounded-full object-cover shadow-sm">
@@ -270,25 +303,11 @@
 
             <!-- Right Column (Sidebar) -->
             <div class="lg:col-span-1">
-                <aside class="sticky top-6 space-y-6">
+                <aside class="sticky top-6 space-y-6" data-aos="fade-left" data-aos-delay="700">
 
 
 
-                    <!-- Info Card -->
-                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                        <h4 class="font-bold text-gray-900 mb-4 text-lg">Informasi Tambahan</h4>
-                        <ul class="space-y-4">
-                            @foreach($destination->highlights as $highlight)
-                                <li class="flex items-center gap-3 text-sm text-gray-600">
-                                    <div
-                                        class="w-6 h-6 rounded-full bg-green-50 flex items-center justify-center text-[#22c55e] flex-shrink-0">
-                                        <i class="fa-solid fa-check text-xs"></i>
-                                    </div>
-                                    {{ $highlight }}
-                                </li>
-                            @endforeach
-                        </ul>
-                    </div>
+
 
                 </aside>
             </div>

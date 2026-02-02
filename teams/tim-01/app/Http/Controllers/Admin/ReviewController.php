@@ -17,7 +17,7 @@ class ReviewController extends Controller
             ->latest()
             ->paginate(10);
 
-        return view('admin.reviews.index', compact('reviews'));
+        return view('admin.Review', compact('reviews'));
     }
 
     // Fungsi untuk menyetujui review

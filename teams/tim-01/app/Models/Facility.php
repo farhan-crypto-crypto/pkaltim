@@ -20,6 +20,6 @@ class Facility extends Model
      */
     public function destinations()
     {
-        return $this->belongsToMany(Destination::class, 'destination_facilities', 'facility_id', 'destination_id');
+        return $this->belongsToMany(Destination::class, 'destination_facility', 'facility_id', 'destination_id');
     }
 }
