@@ -35,6 +35,7 @@
             document.documentElement.classList.remove('dark');
         }
     </script>
+    <link rel="icon" href="{{ asset('WisataKaltim.jpeg') }}" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -65,8 +66,9 @@
 
             <!-- Logo -->
             <a href="{{ url('/') }}" class="flex items-center gap-2 group">
-                <div class="w-8 h-8 rounded-lg bg-brand-500 flex items-center justify-center text-white">
-                    <i class="fa-solid fa-leaf"></i>
+                <div class="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center shadow-sm">
+                    <img src="{{ asset('WisataKaltim.jpeg') }}" alt="Wisata Kaltim Logo"
+                        class="w-full h-full object-cover">
                 </div>
                 <span class="text-xl font-bold text-gray-900 dark:text-white tracking-tight">Wisata<span
                         class="text-brand-500">Kaltim</span></span>
@@ -82,7 +84,7 @@
 
             <!-- Right Side (Auth & Dark Mode) -->
             <div class="flex items-center gap-4">
-                
+
                 <!-- Dark Mode Toggle -->
                 <button id="theme-toggle"
                     class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 transition-colors">
@@ -102,7 +104,8 @@
                 </a>
 
                 <!-- Mobile Menu Button -->
-                <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden text-gray-500 hover:text-brand-500 focus:outline-none">
+                <button @click="mobileMenuOpen = !mobileMenuOpen"
+                    class="md:hidden text-gray-500 hover:text-brand-500 focus:outline-none">
                     <i class="fa-solid fa-bars text-xl"></i>
                 </button>
             </div>
@@ -110,15 +113,18 @@
 
         <!-- Mobile Menu -->
         <div x-show="mobileMenuOpen" x-collapse
-             class="md:hidden bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 absolute w-full left-0 top-20 shadow-lg">
+            class="md:hidden bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 absolute w-full left-0 top-20 shadow-lg">
             <div class="px-4 py-6 space-y-4">
-                <a href="{{ route('landing') }}" class="block text-base font-medium text-gray-700 dark:text-gray-300 hover:text-brand-500 dark:hover:text-brand-400">
+                <a href="{{ route('landing') }}"
+                    class="block text-base font-medium text-gray-700 dark:text-gray-300 hover:text-brand-500 dark:hover:text-brand-400">
                     Beranda
                 </a>
-                <a href="{{ route('destination.index') }}" class="block text-base font-medium text-gray-700 dark:text-gray-300 hover:text-brand-500 dark:hover:text-brand-400">
+                <a href="{{ route('destination.index') }}"
+                    class="block text-base font-medium text-gray-700 dark:text-gray-300 hover:text-brand-500 dark:hover:text-brand-400">
                     Destinasi
                 </a>
-                <a href="{{ route('login') }}" class="block w-full text-center bg-brand-500 hover:bg-brand-600 text-white px-5 py-3 rounded-xl text-base font-bold shadow-lg shadow-brand-500/30 transition-transform hover:-translate-y-0.5">
+                <a href="{{ route('login') }}"
+                    class="block w-full text-center bg-brand-500 hover:bg-brand-600 text-white px-5 py-3 rounded-xl text-base font-bold shadow-lg shadow-brand-500/30 transition-transform hover:-translate-y-0.5">
                     Masuk
                 </a>
             </div>
@@ -138,8 +144,9 @@
                 <!-- Brand -->
                 <div class="col-span-1 md:col-span-2 space-y-4">
                     <a href="#" class="flex items-center gap-2">
-                        <div class="w-8 h-8 rounded-lg bg-brand-500 flex items-center justify-center text-white">
-                            <i class="fa-solid fa-leaf"></i>
+                        <div class="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center shadow-sm">
+                            <img src="{{ asset('WisataKaltim.jpeg') }}" alt="Wisata Kaltim Logo"
+                                class="w-full h-full object-cover">
                         </div>
                         <span class="text-xl font-bold text-gray-900 dark:text-white">Wisata<span
                                 class="text-brand-500">Kaltim</span></span>

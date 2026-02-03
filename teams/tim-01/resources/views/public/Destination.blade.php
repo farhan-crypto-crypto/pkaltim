@@ -47,16 +47,16 @@
                         <h4 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">Kategori</h4>
                         <div class="space-y-3">
                             <label class="flex items-center space-x-3 cursor-pointer group">
-                                <input type="checkbox" checked
-                                    class="w-5 h-5 rounded border-gray-300 text-brand-500 focus:ring-brand-500">
+                                <input type="checkbox" value="all" checked
+                                    class="category-filter w-5 h-5 rounded border-gray-300 text-brand-500 focus:ring-brand-500">
                                 <span class="group-hover:text-brand-500 text-gray-600 dark:text-gray-400">Semua
                                     Wisata</span>
                             </label>
-                            @foreach(['Hutan Lindung', 'Sungai & Danau', 'Pantai & Kepulauan', 'Gua & Karst'] as $cat)
+                            @foreach($categories as $cat)
                                 <label class="flex items-center space-x-3 cursor-pointer group">
-                                    <input type="checkbox"
-                                        class="w-5 h-5 rounded border-gray-300 text-brand-500 focus:ring-brand-500">
-                                    <span class="text-gray-600 dark:text-gray-400 group-hover:text-brand-500">{{ $cat }}</span>
+                                    <input type="checkbox" value="{{ $cat->id }}"
+                                        class="category-filter w-5 h-5 rounded border-gray-300 text-brand-500 focus:ring-brand-500">
+                                    <span class="text-gray-600 dark:text-gray-400 group-hover:text-brand-500">{{ $cat->name }}</span>
                                 </label>
                             @endforeach
                         </div>
@@ -72,14 +72,14 @@
                         </div>
 
                         <div class="relative w-full">
-                            <input id="price-range" type="range" min="0" max="500000" step="50000" value="500000"
+                            <input id="price-range" type="range" min="0" max="500000" step="10000" value="500000"
                                 class="w-full h-2 bg-gray-200 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer accent-brand-500 hover:accent-brand-600 focus:outline-none">
                             <div class="flex justify-between text-[10px] text-gray-400 mt-2 font-medium">
                                 <span>IDR 0</span>
                                 <span>IDR 500.000</span>
                             </div>
                         </div>
-                        <p class="text-[10px] text-gray-400 mt-2 italic">*Geser untuk filter (kelipatan 50rb)</p>
+                        <p class="text-[10px] text-gray-400 mt-2 italic">*Geser untuk filter (kelipatan 10rb)</p>
                     </div>
                 </div>
             </aside>
@@ -103,7 +103,10 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" id="destination-grid">
                     @forelse($destinations as $item)
                         <div class="destination-card bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-sm hover:shadow-xl group border border-gray-100 dark:border-gray-700 flex flex-col h-full relative"
-                            data-price="{{ $item->price ?? 0 }}" data-name="{{ strtolower($item->name) }}" data-aos="zoom-in"
+                            data-price="{{ $item->price ?? 0 }}" 
+                            data-name="{{ strtolower($item->name) }}" 
+                            data-category-id="{{ $item->category_id }}"
+                            data-aos="zoom-in"
                             data-aos-delay="{{ $loop->index * 100 }}">
 
                             <!-- Stretched Link -->
@@ -179,6 +182,7 @@
             const searchInput = document.getElementById('search-input');
             const priceSlider = document.getElementById('price-range');
             const priceLabel = document.getElementById('price-label');
+            const categoryCheckboxes = document.querySelectorAll('.category-filter');
             const cards = document.querySelectorAll('.destination-card');
             const noResult = document.getElementById('no-result-message');
             const countDisplay = document.getElementById('count-display');
@@ -198,6 +202,13 @@
                 const searchValue = searchInput ? searchInput.value.toLowerCase() : '';
                 const maxPrice = priceSlider ? parseInt(priceSlider.value) : 500000;
 
+                // Get selected categories
+                const selectedCategories = Array.from(categoryCheckboxes)
+                    .filter(cb => cb.checked)
+                    .map(cb => cb.value);
+
+                const isAllSelected = selectedCategories.includes('all') || selectedCategories.length === 0;
+
                 // Update Price Label
                 if (priceLabel) priceLabel.innerText = formatRupiah(maxPrice);
 
@@ -207,11 +218,13 @@
                     const itemPrice = parseInt(card.getAttribute('data-price'));
                     // We added data-name, but fallback to h3 text if needed
                     const itemName = card.getAttribute('data-name') || card.querySelector('.destination-name').innerText.toLowerCase();
+                    const itemCategoryId = card.getAttribute('data-category-id');
 
                     const matchesSearch = itemName.includes(searchValue);
                     const matchesPrice = itemPrice <= maxPrice;
+                    const matchesCategory = isAllSelected || selectedCategories.includes(itemCategoryId);
 
-                    if (matchesSearch && matchesPrice) {
+                    if (matchesSearch && matchesPrice && matchesCategory) {
                         card.style.display = 'flex';
                         visibleCount++;
                     } else {
@@ -228,6 +241,31 @@
                     noResult.classList.add('hidden');
                 }
             };
+
+            // Handle Checkbox Logic (Uncheck 'all' if specific selected, check 'all' if none selected)
+            categoryCheckboxes.forEach(cb => {
+                cb.addEventListener('change', function() {
+                    if (this.value === 'all' && this.checked) {
+                        // Uncheck others
+                        categoryCheckboxes.forEach(other => {
+                            if (other !== this) other.checked = false;
+                        });
+                    } else if (this.value !== 'all' && this.checked) {
+                        // Uncheck 'all'
+                        const allCb = document.querySelector('.category-filter[value="all"]');
+                        if (allCb) allCb.checked = false;
+                    }
+                    
+                    // If everything unchecked, check 'all' back
+                    const anyChecked = Array.from(categoryCheckboxes).some(cb => cb.checked);
+                    if (!anyChecked) {
+                        const allCb = document.querySelector('.category-filter[value="all"]');
+                        if (allCb) allCb.checked = true;
+                    }
+
+                    filterDestinations();
+                });
+            });
 
             // Attach Listeners
             if (searchInput) {

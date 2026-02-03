@@ -41,7 +41,7 @@ class Destination extends Model
     // 3. Relasi ke Facilities (Pivot)
     public function facilities()
     {
-        return $this->belongsToMany(Facility::class, 'destination_facility');
+        return $this->belongsToMany(Facility::class, 'destination_facilities');
     }
 
     // 4. Relasi ke Images 

@@ -70,12 +70,9 @@
                 <div class="h-20 flex items-center px-6 border-b border-gray-700/30">
                     <div class="flex items-center gap-3">
                         <div
-                            class="w-8 h-8 rounded-lg bg-brand-500 flex items-center justify-center text-white flex-shrink-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-                            </svg>
+                            class="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center flex-shrink-0 shadow-lg">
+                            <img src="{{ asset('WisataKaltim.jpeg') }}" alt="Admin Logo"
+                                class="w-full h-full object-cover">
                         </div>
                         <span class="text-xl font-bold text-white tracking-tight">Wisata<span
                                 class="text-brand-500">Kaltim</span></span>
@@ -144,13 +141,8 @@
                 <div class="h-20 flex items-center px-0 justify-center border-b border-gray-700/30 relative">
                     <div class="flex items-center gap-3"
                         :class="minimized ? 'justify-center' : 'px-8 w-full justify-start'">
-                        <div
-                            class="w-8 h-8 rounded-lg bg-brand-500 flex items-center justify-center text-white flex-shrink-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-                            </svg>
+                        <div class="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center flex-shrink-0 shadow-lg">
+                            <img src="{{ asset('WisataKaltim.jpeg') }}" alt="Admin Logo" class="w-full h-full object-cover">
                         </div>
                         <span x-show="!minimized"
                             class="text-xl font-bold text-gray-900 dark:text-white tracking-tight whitespace-nowrap transition-opacity duration-200">Wisata<span

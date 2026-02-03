@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Jelajahi Permata Alam')
+@section('title', 'WisataKaltim')
 
 @section('content')
     <!-- Hero Section -->
@@ -20,8 +20,10 @@
             </h1>
             <p class="text-gray-200 text-lg max-w-2xl mx-auto mb-10 font-light leading-relaxed" data-aos="fade-up"
                 data-aos-delay="100">
-                Mulai dari hutan hujan tropis yang alami hingga keindahan laut di Kepulauan Derawan. Nikmati pengalaman
-                wisata yang autentik di tanah Borneo.
+                Jelajahi keindahan alam dan budaya Kalimantan Timur, mulai dari pesona bawah laut Kepulauan Derawan hingga
+                tradisi unik Desa Pampang.
+                Dapatkan informasi lengkap mengenai lokasi, harga tiket, dan fasilitas terkini untuk merencanakan perjalanan
+                Anda di Kalimantan Timur.
             </p>
         </div>
     </header>
@@ -139,17 +141,17 @@
 
         <!-- Photo Slider Section -->
         <section x-data="{ activeSlide: 0, slides: [
-                                                    @if($galleryImages->count() > 0)
-                                                        @foreach($galleryImages as $img)
-                                                            '{{ asset('storage/' . $img->image_path) }}',
-                                                        @endforeach
-                                                    @else
-                                                        'https://images.unsplash.com/photo-1544413660-29911cd4f0bc?q=80&w=1932&auto=format&fit=crop',
-                                                        'https://images.unsplash.com/photo-1596401057633-565652dc80fa?q=80&w=1955&auto=format&fit=crop',
-                                                        'https://images.unsplash.com/photo-1518182170546-0766ce6fec56?q=80&w=1920&auto=format&fit=crop',
-                                                        'https://images.unsplash.com/photo-1533692328991-08159ff19fca?q=80&w=1980&auto=format&fit=crop'
-                                                    @endif
-                                                ], interval: null }"
+                                                        @if($galleryImages->count() > 0)
+                                                            @foreach($galleryImages as $img)
+                                                                '{{ asset('storage/' . $img->image_path) }}',
+                                                            @endforeach
+                                                        @else
+                                                            'https://images.unsplash.com/photo-1544413660-29911cd4f0bc?q=80&w=1932&auto=format&fit=crop',
+                                                            'https://images.unsplash.com/photo-1596401057633-565652dc80fa?q=80&w=1955&auto=format&fit=crop',
+                                                            'https://images.unsplash.com/photo-1518182170546-0766ce6fec56?q=80&w=1920&auto=format&fit=crop',
+                                                            'https://images.unsplash.com/photo-1533692328991-08159ff19fca?q=80&w=1980&auto=format&fit=crop'
+                                                        @endif
+                                                    ], interval: null }"
             x-init="interval = setInterval(() => { activeSlide = activeSlide === slides.length - 1 ? 0 : activeSlide + 1 }, 5000)"
             class="mb-10" data-aos="fade-up">
             <div class="mb-10 text-center">
@@ -287,25 +289,25 @@
 
         <!-- Preloader -->
         <div x-data="{ 
-                    visible: !sessionStorage.getItem('landing_loaded'),
-                    init() {
-                        if(this.visible) {
-                             document.body.classList.add('overflow-hidden');
-                             setTimeout(() => {
-                                this.visible = false;
-                                sessionStorage.setItem('landing_loaded', 'true');
-                                document.body.classList.remove('overflow-hidden');
-                             }, 3000); // 3 seconds duration
+                        visible: !sessionStorage.getItem('landing_loaded'),
+                        init() {
+                            if(this.visible) {
+                                 document.body.classList.add('overflow-hidden');
+                                 setTimeout(() => {
+                                    this.visible = false;
+                                    sessionStorage.setItem('landing_loaded', 'true');
+                                    document.body.classList.remove('overflow-hidden');
+                                 }, 3000); // 3 seconds duration
+                            }
                         }
-                    }
-                }" x-show="visible" x-transition:leave="transition ease-in duration-500"
+                    }" x-show="visible" x-transition:leave="transition ease-in duration-500"
             x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
             class="fixed inset-0 z-[100] bg-white dark:bg-gray-900 flex flex-col items-center justify-center">
 
             <div class="mb-4 animate-bounce">
                 <div
-                    class="w-20 h-20 rounded-2xl bg-brand-500 flex items-center justify-center text-white shadow-xl shadow-brand-500/30">
-                    <i class="fa-solid fa-leaf text-4xl"></i>
+                    class="w-24 h-24 rounded-2xl overflow-hidden shadow-xl shadow-brand-500/30 flex items-center justify-center bg-white">
+                    <img src="{{ asset('WisataKaltim.jpeg') }}" alt="Loading Logo" class="w-full h-full object-cover">
                 </div>
             </div>
 
