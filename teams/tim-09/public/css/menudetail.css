@@ -1,0 +1,213 @@
+/* =========================================
+   VARIABLES & BASE 
+========================================= */
+:root {
+    --sage-green: #16a34a;
+    --dark-sage: #15803d;
+    --text-dark: #1f2937;
+    --text-light: #6b7280;
+    --shadow-sm: 0 4px 20px rgba(0,0,0,0.04);
+}
+
+body {
+    background-color: #fcfdfd;
+    font-family: 'Inter', sans-serif;
+    color: var(--text-dark);
+    overflow-x: hidden; /* Mencegah scroll samping */
+}
+
+/* =========================================
+   NAVBAR (RESPONSIVE)
+========================================= */
+.navbar-custom {
+    background-color: #ffffff !important;
+    min-height: 80px; /* Ganti height jadi min-height */
+    padding-top: 10px;
+    padding-bottom: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.navbar-custom .nav-link {
+    color: var(--text-dark) !important;
+    font-weight: 500;
+    transition: 0.3s;
+    padding: 10px 15px !important; /* Padding enak untuk touch */
+}
+
+.navbar-custom .nav-link.active, 
+.navbar-custom .nav-link:hover {
+    color: var(--sage-green) !important;
+    font-weight: 700;
+}
+
+.navbar-toggler {
+    border: none;
+    box-shadow: none !important;
+}
+
+/* =========================================
+   IMAGE SECTION 
+========================================= */
+.detail-card-img {
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+.menu-img {
+    width: 100%;
+    height: 380px;
+    object-fit: cover;
+}
+
+/* =========================================
+   INFO BOX 
+========================================= */
+.info-box {
+    background: #ffffff;
+    border: 1px solid #f1f5f9;
+    border-radius: 16px;
+}
+
+.price-text {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--sage-green);
+}
+
+/* =========================================
+   HORIZONTAL SCROLL REVIEW 
+========================================= */
+.review-scroll-container {
+    display: flex;
+    overflow-x: auto;
+    gap: 20px;
+    padding: 10px 5px 25px 5px;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+    scrollbar-color: var(--sage-green) #f1f5f9;
+}
+
+.review-scroll-container::-webkit-scrollbar {
+    height: 6px;
+}
+.review-scroll-container::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 10px;
+}
+.review-scroll-container::-webkit-scrollbar-thumb {
+    background: var(--sage-green);
+    border-radius: 10px;
+}
+
+.review-card-wrapper {
+    flex: 0 0 350px;
+    scroll-snap-align: start;
+}
+
+.review-card {
+    border: none;
+    border-radius: 15px;
+    background: #ffffff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+/* =========================================
+   RATING STAR INPUT 
+========================================= */
+.rate {
+    float: left;
+    height: 46px;
+    padding: 0 10px;
+}
+.rate:not(:checked) > input {
+    position: absolute;
+    top: -9999px;
+}
+.rate:not(:checked) > label {
+    float: right;
+    width: 1em;
+    overflow: hidden;
+    white-space: nowrap;
+    cursor: pointer;
+    font-size: 30px;
+    color: #ccc;
+}
+.rate:not(:checked) > label:before { content: '★ '; }
+.rate > input:checked ~ label { color: #ffc700; }
+.rate:not(:checked) > label:hover,
+.rate:not(:checked) > label:hover ~ label { color: #deb217; }
+.rate > input:checked + label:hover,
+.rate > input:checked + label:hover ~ label,
+.rate > input:checked ~ label:hover,
+.rate > input:checked ~ label:hover ~ label,
+.rate > label:hover ~ input:checked ~ label { color: #c59b08; }
+
+/* =========================================
+   MAP & FOOTER 
+========================================= */
+.map-frame {
+    width: 100%;
+    height: 420px;
+    border: none;
+    border-radius: 16px; /* Tambah radius biar halus */
+}
+
+.footer-modern {
+    background-color: #111827;
+    padding: 60px 0 30px;
+    margin-top: 80px;
+    color: white;
+}
+
+.footer-modern h5, .footer-modern h6 { letter-spacing: 1px; }
+.footer-modern a { color: #9ca3af; text-decoration: none; }
+.footer-modern a:hover { color: var(--sage-green) !important; transition: 0.3s; }
+.footer-modern .bi { transition: transform 0.3s; }
+.footer-modern .bi:hover { transform: translateY(-3px); color: white !important; }
+
+/* =========================================
+   RESPONSIVE FIXES (MOBILE)
+========================================= */
+
+/* Tablet & Mobile (< 991px) */
+@media (max-width: 991px) {
+    /* Navbar Collapse Style */
+    .navbar-collapse {
+        background: #ffffff;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        margin-top: 15px;
+        text-align: center;
+    }
+    
+    .navbar-custom .nav-item {
+        border-bottom: 1px solid #f3f4f6;
+    }
+    
+    .navbar-custom .nav-item:last-child {
+        border-bottom: none;
+    }
+}
+
+/* Mobile (< 768px) */
+@media (max-width: 768px) {
+    /* Gambar Menu tidak terlalu tinggi di HP */
+    .menu-img {
+        height: 250px; 
+    }
+    
+    /* Kartu Review lebih kecil di HP agar muat di layar */
+    .review-card-wrapper {
+        flex: 0 0 300px; 
+    }
+    
+    .map-frame {
+        height: 300px;
+    }
+    
+    .price-text {
+        font-size: 1.5rem;
+    }
+}

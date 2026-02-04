@@ -1,28 +1,108 @@
-# Tim 09 - [Subtema]
+# 🍽️ Kulkaltim  
+**Pariwisata Kuliner Kalimantan Timur**
 
-**PIC:** [PIC Name]  
-**Subtema:** [Detail Subtema]
+## 📌 Informasi Tim
+**Tim 09 – Pariwisata Kuliner Kalimantan Timur**  
+**Subtema:** Kuliner Kalimantan Timur (Kulkaltim)  
+**PIC:** [Navies]
 
-## 👥 Anggota Tim
-1. [Nama 1] (Leader)
-2. [Nama 2]
-3. [Nama 3]
-
-## 📝 Deskripsi Project
-[Deskripsi singkat project tim kalian]
-
-## 🎯 Target Fitur
-- [ ] CRUD lengkap
-- [ ] Login admin
-- [ ] Responsive UI
-- [ ] Database relational
-- [ ] Deploy hosting
-
-## 🚀 Live Demo
-**URL:** [Coming Soon]
-
-## 📅 Status
-🔄 Setup
+### 👥 Anggota Tim
+- **[Muhammad Rifqi Ramadhan]**
+- **[Muhammad Zidan Pratama]**
+- **[Rafik Anugrah Yana]**
 
 ---
-**Last Update:** 9 Januari 2026
+
+## 📝 Deskripsi Project
+**Kulkaltim** adalah platform direktori kuliner berbasis web yang dirancang untuk memperkenalkan kekayaan makanan khas **Kalimantan Timur**.  
+Aplikasi ini menjadi solusi bagi wisatawan maupun masyarakat lokal dalam mencari referensi tempat makan yang valid, terpusat, dan mudah diakses.
+
+Sistem dibangun menggunakan **Laravel 12.x** dan **MySQL**, dengan **Bootstrap 5** sebagai framework UI untuk menghasilkan tampilan yang responsif, dan modern.
+
+---
+
+## 👤 Peran Pengguna
+
+### 🧑‍🍳 Front-Office (User Umum)
+- Pencarian kuliner berdasarkan **nama menu atau restoran**
+- Filter kuliner berdasarkan **kota**
+- Melihat detail menu (harga & deskripsi)
+- Akses lokasi restoran melalui **Google Maps**
+- Memberikan **rating & ulasan**
+
+### 🛠️ Back-Office (Administrator)
+- Dashboard admin dengan **grafik statistik (Chart.js)**
+- Manajemen data:
+  - Kota
+  - Restoran
+  - Menu
+  - Review Pengunjung
+- Moderasi ulasan pengguna
+- Autentikasi admin yang aman
+
+---
+
+## 🎯 Target & Status Fitur
+
+| Fitur | Status |
+|------|--------|
+| CRUD Kota, Restoran, Menu, Review | ✅ |
+| Login Admin (Session & Bcrypt) | ✅ |
+| Responsive UI (Bootstrap 5) | ✅ |
+| Database Relational (Kota → Resto → Menu → Review) | ✅ |
+| Pencarian & Filter Kota | ✅ |
+| Hitung Rating Otomatis | ✅ |
+| Google Maps Embed | ✅ |
+| Deploy Hosting | ⏳ |
+
+---
+
+## 🗄️ Teknologi yang Digunakan
+- **Framework:** Laravel 12.x  
+- **Database:** MySQL  
+- **Frontend:** Bootstrap 5  
+- **Chart:** Chart.js  
+- **Authentication:** Session & Bcrypt  
+- **Maps:** Google Maps Embed  
+
+---
+
+## 📦 Cara Instalasi
+Jika ingin menjalankan project ini di komputer lokal, ikuti langkah berikut:
+
+1.  **Masuk ke direktori:**
+    ```bash
+    cd pkaltim/teams/tim-09
+    ```
+2.  **Install Vendor:**
+    ```bash
+    composer install
+    ```
+3.  **Setup Environment:**
+    * Copy file `.env.example` menjadi `.env`.
+    * Atur database: `DB_DATABASE=db_kulkaltim`.
+4.  **Migrate Database:**
+    ```bash
+    php artisan key:generate
+    php artisan migrate:fresh --seed
+    ```
+5.  **Jalankan Server:**
+    ```bash
+    php artisan serve
+    ```
+
+---
+
+## 🚀 Live Demo
+🔗 **URL:** _Coming Soon_
+
+---
+
+## 📅 Status Project
+🔄 **Development (Hampir Selesai)**  
+🕒 **Last Update:** 1 Februari 2026
+
+---
+
+## 📄 Lisensi
+Project ini dibuat untuk keperluan sekolah dan pengembangan sistem informasi berbasis web.

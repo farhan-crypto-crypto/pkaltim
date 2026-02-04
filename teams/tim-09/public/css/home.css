@@ -1,0 +1,430 @@
+/* =========================================
+   VARIABLES & BASE 
+========================================= */
+:root {
+    --sage-green: #16a34a;
+    --dark-sage: #15803d;
+    --soft-white: #fcfdfd;
+    --text-dark: #1f2937;
+    --text-light: #6b7280;
+    --shadow-sm: 0 4px 20px rgba(0,0,0,0.04);
+    --shadow-md: 0 10px 40px rgba(0,0,0,0.08);
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--soft-white);
+    color: var(--text-dark);
+    line-height: 1.6;
+    overflow-x: hidden; /* Mencegah scroll samping di HP */
+}
+
+/* =========================================
+   NAVBAR 
+========================================= */
+.main-nav {
+    min-height: 80px; /* Ganti height jadi min-height agar responsif */
+    box-shadow: var(--shadow-sm);
+    background: #ffffff;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.navbar-brand { 
+    color: var(--sage-green) !important; 
+    font-size: 1.5rem; 
+}
+
+.nav-link {
+    font-weight: 500;
+    color: var(--text-light) !important;
+    transition: 0.3s;
+    padding: 10px 15px !important; /* Tambah padding agar enak disentuh di HP */
+}
+
+.nav-link:hover, .nav-link.active {
+    color: var(--sage-green) !important;
+}
+
+/* Toggler (Tombol Burger) */
+.navbar-toggler {
+    border: none;
+    box-shadow: none !important;
+}
+.navbar-toggler:focus {
+    outline: none;
+}
+
+/* =========================================
+   HERO SECTION 
+========================================= */
+.hero-wrapper {
+    height: 50vh;
+    min-height: 450px;
+    background: url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1') center/cover no-repeat;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.6));
+}
+
+.hero-fade-bottom {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 120px;
+    background: linear-gradient(to bottom, transparent, var(--soft-white));
+    z-index: 2;
+}
+
+.badge-promo {
+    background: rgba(22, 163, 74, 0.9);
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    display: inline-block;
+    color: #fff;
+}
+
+.hero-title {
+    font-size: 3.5rem;
+}
+
+/* =========================================
+   SEARCH BAR 
+========================================= */
+.search-container {
+    margin-top: -50px;
+    position: relative;
+    z-index: 20;
+    padding-bottom: 20px;
+}
+
+.search-modern {
+    background: #ffffff;
+    padding: 12px;
+    border-radius: 18px;
+    box-shadow: var(--shadow-md);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.search-input-wrapper {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    background: #f9fafb;
+    border-radius: 12px;
+    padding: 0 15px;
+}
+
+.search-input {
+    width: 100%;
+    border: none;
+    background: transparent;
+    outline: none;
+    padding: 12px 10px;
+    color: var(--text-dark);
+}
+
+.search-select {
+    border: none;
+    outline: none;
+    padding: 12px 16px;
+    border-radius: 12px;
+    background: #f9fafb;
+    color: var(--text-dark);
+    cursor: pointer;
+}
+
+.search-btn {
+    background: var(--sage-green);
+    color: #fff;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.search-btn:hover { background: var(--dark-sage); transform: translateY(-2px); }
+
+/* =========================================
+   FOOD CARD (DESIGN UTAMA)
+========================================= */
+.card-link {
+    text-decoration: none !important;
+    display: block;
+    height: 100%;
+}
+
+.food-card {
+    background: #ffffff;
+    border-radius: 24px;
+    border: 1px solid #f1f5f9;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.card-link:hover .food-card {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-md);
+}
+
+.food-image-wrapper {
+    position: relative;
+    height: 220px;
+    overflow: hidden;
+}
+
+.food-image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: 0.5s;
+}
+
+.card-link:hover .food-image-wrapper img {
+    transform: scale(1.1);
+}
+
+.location-tag {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 5px 12px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--dark-sage);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    z-index: 3;
+}
+
+.food-info {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.food-info h5 {
+    color: var(--text-dark);
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.food-info .text-muted {
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+.price-text {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--sage-green);
+}
+
+/* =========================================
+   ABOUT SECTION
+========================================= */
+.about-section {
+    background-color: #ffffff;
+    overflow: hidden;
+}
+
+.about-image-stack {
+    position: relative;
+    padding-right: 20px;
+}
+
+.about-image-stack .main-img {
+    width: 100%;
+    height: 450px;
+    object-fit: cover;
+    border: 8px solid #f8fafc;
+}
+
+.experience-badge {
+    position: absolute;
+    bottom: -20px;
+    right: 0;
+    background: var(--sage-green);
+    padding: 20px 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(22, 163, 74, 0.3);
+    text-align: center;
+    color: white;
+}
+
+.icon-box-small {
+    width: 45px;
+    height: 45px;
+    background: #f0fdf4;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0; /* Agar icon tidak gepeng di mobile */
+}
+
+.tracking-wider {
+    letter-spacing: 0.1em;
+    font-size: 0.9rem;
+}
+
+.section-title {
+    position: relative;
+    padding-bottom: 15px;
+}
+
+.title-line {
+    width: 60px;
+    height: 4px;
+    background: var(--sage-green);
+    border-radius: 2px;
+}
+
+/* =========================================
+   FOOTER & BUTTONS 
+========================================= */
+.btn-see-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 35px;
+    color: var(--sage-green);
+    border: 2px solid var(--sage-green);
+    border-radius: 50px;
+    font-weight: 600;
+    transition: 0.3s;
+    text-decoration: none;
+}
+
+.btn-see-all:hover {
+    background: var(--sage-green);
+    color: #fff;
+    transform: translateY(-3px);
+}
+
+.footer-modern {
+    background-color: #111827; 
+    padding: 60px 0 30px;
+    margin-top: 80px;
+}
+
+.footer-modern h5, .footer-modern h6 {
+    letter-spacing: 1px;
+}
+
+.footer-modern a:hover {
+    color: #16a34a !important;
+    transition: 0.3s;
+}
+
+.footer-modern .bi {
+    transition: transform 0.3s;
+}
+
+.footer-modern .bi:hover {
+    transform: translateY(-3px);
+    color: white !important;
+}
+
+/* =========================================
+   RESPONSIVE & MOBILE FIXES (PENTING)
+========================================= */
+
+/* Tablet & Mobile (< 991px) */
+@media (max-width: 991px) {
+    /* Navbar Collapse Style */
+    .navbar-collapse {
+        background: #ffffff;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        margin-top: 15px;
+    }
+    
+    .nav-item {
+        text-align: center;
+        border-bottom: 1px solid #f3f4f6;
+    }
+    
+    .nav-item:last-child {
+        border-bottom: none;
+    }
+
+    .about-image-stack {
+        margin-bottom: 50px;
+        padding-right: 0;
+    }
+    
+    .about-image-stack .main-img {
+        height: 350px;
+    }
+}
+
+/* Mobile (< 768px) */
+@media (max-width: 768px) {
+    /* Hero Title Mengecil */
+    .hero-title { 
+        font-size: 2.5rem; 
+    }
+    
+    .hero-wrapper {
+        min-height: 400px;
+    }
+
+    /* Search Bar Menumpuk ke Bawah */
+    .search-modern {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 15px;
+    }
+
+    .search-input-wrapper, 
+    .search-select, 
+    .search-btn {
+        width: 100%;
+    }
+
+    .search-select {
+        text-align: center; /* Agar text select di tengah */
+    }
+    
+    .search-container {
+        margin-top: -30px;
+    }
+}
+
+/* Small Mobile (< 576px) */
+@media (max-width: 576px) {
+    .hero-title { 
+        font-size: 2rem; 
+    }
+    
+    .experience-badge {
+        padding: 15px 20px;
+        right: 50%;
+        transform: translateX(50%); /* Center badge di mobile */
+        bottom: -30px;
+        width: 80%;
+    }
+}

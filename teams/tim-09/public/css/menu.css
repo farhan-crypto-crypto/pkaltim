@@ -1,0 +1,308 @@
+/* =========================================
+   VARIABLES & BASE 
+========================================= */
+:root {
+    --sage-green: #16a34a;
+    --dark-sage: #15803d;
+    --soft-white: #fcfdfd;
+    --text-dark: #1f2937;
+    --text-light: #6b7280;
+    --shadow-sm: 0 4px 20px rgba(0,0,0,0.04);
+    --shadow-md: 0 10px 40px rgba(0,0,0,0.08);
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--soft-white);
+    color: var(--text-dark);
+    overflow-x: hidden; /* Mencegah scroll samping di HP */
+}
+
+/* =========================================
+   NAVBAR 
+========================================= */
+.main-nav {
+    min-height: 80px; /* Ganti fixed height jadi min-height */
+    box-shadow: var(--shadow-sm);
+    background: #fff;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-brand { 
+    color: var(--sage-green) !important; 
+    font-size: 1.5rem;
+}
+
+.nav-link {
+    font-weight: 500;
+    color: var(--text-light) !important;
+    transition: 0.3s;
+    padding: 10px 15px !important; /* Padding lebih besar untuk touch screen */
+}
+
+.nav-link.active, .nav-link:hover { 
+    color: var(--sage-green) !important; 
+}
+
+/* Toggler (Tombol Burger Menu) */
+.navbar-toggler {
+    border: none;
+    box-shadow: none !important;
+}
+
+/* =========================================
+   HERO SECTION 
+========================================= */
+.hero-wrapper {
+    height: 45vh;
+    min-height: 350px; /* Tinggi minimum agar tidak gepeng di HP */
+    background: url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1') center/cover no-repeat;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.6));
+}
+
+.hero-fade-bottom {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 120px;
+    background: linear-gradient(to bottom, transparent, var(--soft-white));
+}
+
+.badge-promo {
+    background: rgba(22,163,74,0.9);
+    padding: 6px 18px;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: inline-block; /* Agar rapi */
+    margin-bottom: 15px;
+    color: white;
+}
+
+/* =========================================
+   SEARCH BOX 
+========================================= */
+.search-container {
+    margin-top: -50px;
+    position: relative;
+    z-index: 10;
+    padding-bottom: 20px;
+}
+
+.search-modern {
+    background: #fff;
+    padding: 12px;
+    border-radius: 18px;
+    box-shadow: var(--shadow-md);
+    display: flex;
+    gap: 10px;
+    max-width: 900px;
+    margin: auto;
+    align-items: center;
+}
+
+.search-input-wrapper {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    background: #f9fafb;
+    border-radius: 12px;
+    padding: 0 12px;
+}
+
+.search-input {
+    border: none;
+    background: transparent;
+    outline: none;
+    width: 100%;
+    padding: 12px;
+}
+
+.search-select {
+    border: none;
+    background: #f9fafb;
+    border-radius: 12px;
+    padding: 12px 16px;
+    cursor: pointer;
+}
+
+.search-btn {
+    background: var(--sage-green);
+    color: #fff;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: background 0.3s ease;
+}
+
+.search-btn:hover { background: var(--dark-sage); }
+
+/* =========================================
+   CARD DESIGN 
+========================================= */
+.card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block; /* Pastikan block agar full area */
+    height: 100%;
+    transition: all 0.3s ease;
+}
+
+.food-card {
+    background: #fff;
+    border-radius: 24px;
+    border: 1px solid #f1f5f9;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Agar tinggi kartu seragam */
+    transition: all 0.3s ease;
+}
+
+.card-link:hover .food-card {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-md);
+}
+
+.food-image-wrapper {
+    height: 220px;
+    position: relative;
+}
+
+.food-image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.location-tag {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: rgba(255,255,255,0.95);
+    padding: 5px 12px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--dark-sage);
+}
+
+.food-info {
+    padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.btn-see-all {
+    display: inline-block;
+    padding: 12px 30px;
+    background: var(--sage-green);
+    color: white;
+    text-decoration: none;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.btn-see-all:hover { background: var(--dark-sage); color: white; }
+
+/* =========================================
+   FOOTER 
+========================================= */
+.footer-modern {
+    background-color: #111827;
+    padding: 60px 0 30px;
+    margin-top: 80px;
+    color: white;
+}
+
+.footer-modern h5, .footer-modern h6 {
+    letter-spacing: 1px;
+}
+
+.footer-modern a { color: #9ca3af; text-decoration: none; }
+
+.footer-modern a:hover {
+    color: #16a34a !important;
+    transition: 0.3s;
+}
+
+.footer-modern .bi {
+    transition: transform 0.3s;
+}
+
+.footer-modern .bi:hover {
+    transform: translateY(-3px);
+    color: white !important;
+}
+
+/* =========================================
+   RESPONSIVE & MOBILE FIXES (PENTING)
+========================================= */
+
+/* Tablet & Mobile (< 991px) */
+@media (max-width: 991px) {
+    /* Navbar Style saat dibuka di HP */
+    .navbar-collapse {
+        background: #ffffff;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        margin-top: 15px;
+        text-align: center;
+    }
+    
+    .nav-item {
+        border-bottom: 1px solid #f3f4f6;
+    }
+    
+    .nav-item:last-child {
+        border-bottom: none;
+    }
+}
+
+/* Mobile (< 768px) */
+@media (max-width: 768px) {
+    /* Search Bar Tumpuk */
+    .search-modern {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 15px;
+    }
+
+    .search-input-wrapper, 
+    .search-select, 
+    .search-btn {
+        width: 100%;
+    }
+
+    .search-select {
+        text-align: center;
+    }
+    
+    .search-container {
+        margin-top: -30px;
+    }
+
+    .hero-wrapper {
+        height: 40vh; /* Sedikit lebih pendek di HP */
+        min-height: 300px;
+    }
+    
+    .display-5 {
+        font-size: 2rem; /* Judul Hero lebih kecil */
+    }
+}
